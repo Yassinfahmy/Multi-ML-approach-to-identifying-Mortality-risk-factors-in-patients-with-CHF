@@ -38,6 +38,8 @@ for i in np.array([2,4,6,7,8]):
     names.append(col[i])
 names=['t'+ i for i in names]
 
+untransformedData=data.iloc[:,[2,4,6,7,8]].copy()
+
 #power transform some columns
 pt = PowerTransformer(method='box-cox')
 tData = pd.DataFrame(pt.fit_transform(data.iloc[:,[2,4,6,7,8]]),columns=names)
@@ -279,7 +281,7 @@ plt.show()
 #chosen model of 3 clusters based on visual inspection of silhoutte plots
 km              = KMeans(n_clusters=3, random_state=42).fit(x)
 clusters        =km.labels_
-kmDf=pd.DataFrame(np.concatenate((np.array(df),np.reshape(clusters,(len(clusters),1))),axis=1))
+kmDf=pd.DataFrame(np.concatenate((np.array(untransformedData),np.reshape(clusters,(len(clusters),1))),axis=1))
 
 #separate clusters to run statistics
 kmClust1=kmDf.loc[clusters==0]
@@ -321,13 +323,60 @@ f, ax =plt.subplots()
 r1=ax.bar(x - width,c[0],width,label='Cluster 1')
 r2=ax.bar(x ,c[1],width,label='Cluster 2')
 r3=ax.bar(x + width,c[2],width,label='Cluster 3')
-
 ax.set_ylabel('Counts')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
 plt.xticks(rotation=70)
 ax.legend()
 plt.show()
+
+#show continus untransformed variables clusters hist
+cNames=tData.columns
+plt.hist(kmClust1.iloc[:,0],bins=10)
+plt.hist(kmClust2.iloc[:,0],bins=10,alpha=0.5)
+plt.hist(kmClust3.iloc[:,0],bins=10,alpha=0.5)
+plt.legend(['Cluster1','Cluster 2','Cluster 3'])
+plt.xlabel('Distribution')
+plt.ylabel('Frequency')
+plt.title('Creatinine Phosphokinase')
+plt.show()
+
+plt.hist(kmClust1.iloc[:,1],bins=10)
+plt.hist(kmClust2.iloc[:,1],bins=10,alpha=0.5)
+plt.hist(kmClust3.iloc[:,1],bins=10,alpha=0.5)
+plt.legend(['Cluster1','Cluster 2','Cluster 3'])
+plt.xlabel('Distribution')
+plt.ylabel('Frequency')
+plt.title('Ejection Fraction')
+plt.show()
+
+plt.hist(kmClust1.iloc[:,2],bins=10)
+plt.hist(kmClust2.iloc[:,2],bins=10,alpha=0.5)
+plt.hist(kmClust3.iloc[:,2],bins=10,alpha=0.5)
+plt.legend(['Cluster1','Cluster 2','Cluster 3'])
+plt.xlabel('Distribution')
+plt.ylabel('Frequency')
+plt.title('Platelets Count')
+plt.show()
+
+plt.hist(kmClust1.iloc[:,3],bins=10)
+plt.hist(kmClust2.iloc[:,3],bins=10,alpha=0.5)
+plt.hist(kmClust3.iloc[:,3],bins=10,alpha=0.5)
+plt.legend(['Cluster1','Cluster 2','Cluster 3'])
+plt.xlabel('Distribution')
+plt.ylabel('Frequency')
+plt.title('Serum Creatinine')
+plt.show()
+
+plt.hist(kmClust1.iloc[:,4],bins=10)
+plt.hist(kmClust2.iloc[:,4],bins=10,alpha=0.5)
+plt.hist(kmClust3.iloc[:,4],bins=10,alpha=0.5)
+plt.legend(['Cluster1','Cluster 2','Cluster 3'])
+plt.xlabel('Distribution')
+plt.ylabel('Frequency')
+plt.title('Serum Sodium')
+plt.show()
+
 
 
 
